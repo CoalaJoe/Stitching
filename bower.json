@@ -1,0 +1,18 @@
+{
+  "name": "stitching",
+  "homepage": "https://github.com/CoalaJoe/Stitching",
+  "authors": [
+    "Dominik Müller"
+  ],
+  "description": "KNW for Module 152",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

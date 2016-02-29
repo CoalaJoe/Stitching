@@ -6,16 +6,21 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class AppController
+ *
+ * @package AppBundle\Controller
+ */
 class AppController extends Controller
 {
     /**
      * @Route("/", name="homepage")
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('AppBundle:default:index.html.twig', array(
-            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-        ));
+        return $this->render('AppBundle:default:index.html.twig');
     }
 }
