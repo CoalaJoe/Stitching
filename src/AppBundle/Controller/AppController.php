@@ -21,6 +21,30 @@ class AppController extends Controller
      */
     public function indexAction(Request $request)
     {
-        return $this->render('AppBundle:default:index.html.twig');
+        return $this->render('AppBundle:app:index.html.twig');
+    }
+
+    /**
+     * @Route("/archive", name="app_archive_route")
+     */
+    public function archiveAction()
+    {
+        return $this->render('AppBundle:app:archive.html.twig');
+    }
+
+    /**
+     * @Route("/record", name="app_record_route")
+     */
+    public function recordAction()
+    {
+        return $this->render('AppBundle:app:record.html.twig');
+    }
+
+    /**
+     * @Route("/delete", name="app_delete_route")
+     */
+    public function deleteAction()
+    {
+        return $this->render('AppBundle:app:delete.html.twig');
     }
 }
