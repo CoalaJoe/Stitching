@@ -9,6 +9,11 @@
 namespace AppBundle\Service;
 
 
+/**
+ * Class WebcamHandler
+ *
+ * @package AppBundle\Service
+ */
 class WebcamHandler
 {
     /**
@@ -24,6 +29,14 @@ class WebcamHandler
     public function __construct(string $camIp)
     {
         $this->camIp = $camIp;
+    }
+
+    public function takeImage()
+    {
+        $curl   = $this->getBaseCurl($this->getBaseUrl()."video.jpg");
+        $result = curl_exec($curl);
+
+        return base64_encode($result);
     }
 
     /**
@@ -51,11 +64,30 @@ class WebcamHandler
     }
 
     /**
-     *
+     * Moves Left
      */
-    public function takeImage()
+    public function moveLeft()
     {
-        $curl = $this->getBaseCurl($this->getBaseUrl()."video.jpg");
-
+        $curl = $this->getBaseCurl($this->getBaseUrl()."camctrl.cgi?move=left");
+        curl_exec($curl);
     }
+
+    /**
+     * Moves Right
+     */
+    public function moveRight()
+    {
+        $curl = $this->getBaseCurl($this->getBaseUrl()."camctrl.cgi?move=right");
+        curl_exec($curl);
+    }
+
+    /**
+     * Moves Home
+     */
+    public function moveHome()
+    {
+        $curl = $this->getBaseCurl($this->getBaseUrl()."camctrl.cgi?move=home");
+        curl_exec($curl);
+    }
+
 }
