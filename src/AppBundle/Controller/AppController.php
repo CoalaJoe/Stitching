@@ -21,6 +21,8 @@ class AppController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $webcam = $this->get('app.webcam.handler')->takeImage();
+        
         return $this->render('AppBundle:app:index.html.twig');
     }
 

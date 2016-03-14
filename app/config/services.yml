@@ -10,3 +10,7 @@ services:
 
     app.stitcher:
         class: AppBundle\Service\Stitcher
+
+    app.webcam.handler:
+        class: AppBundle\Service\WebcamHandler
+        arguments: ["%camera_ip%"]
