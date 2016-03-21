@@ -31,12 +31,17 @@ class WebcamHandler
         $this->camIp = $camIp;
     }
 
+    /**
+     * Receives image resource from webcam
+     *
+     * @return string
+     */
     public function takeImage()
     {
         $curl   = $this->getBaseCurl($this->getBaseUrl()."video.jpg");
         $result = curl_exec($curl);
 
-        return base64_encode($result);
+        return $result;
     }
 
     /**

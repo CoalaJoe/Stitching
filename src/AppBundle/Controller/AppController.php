@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Image;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +34,11 @@ class AppController extends Controller
         sleep(1);
         $image3 = $handler->takeImage();
 
-        return $this->render('AppBundle:app:index.html.twig', array('image1' => $image1, 'image2' => $image2, 'image3' => $image3));
+        $img = $this->get('app.stitcher')->stitch($image1, $image2, $image3);
+
+        $image = new Image();
+
+        return $this->render('@App/app/index.html.twig', array('img' => base64_encode($img)));
     }
 
     /**

@@ -4,9 +4,12 @@
     <div class="container">
         <div class="well bootable boot-start">
             <h1>Herzlich Willkommen</h1>
-            <img src="data:image/jpg;base64,{{ image1 }}" width="33%">
-            <img src="data:image/jpg;base64,{{ image2 }}" width="33%">
-            <img src="data:image/jpg;base64,{{ image3 }}" width="33%">
+                <img src="data:image/png;base64,{{ img }}" width="33%">
+            {% if image1 is defined %}
+                <img src="data:image/jpg;base64,{{ image1 }}" width="33%">
+                <img src="data:image/jpg;base64,{{ image2 }}" width="33%">
+                <img src="data:image/jpg;base64,{{ image3 }}" width="33%">
+            {% endif %}
             <blockquote>
                 <p>Dies ist mein Projekt im Rahmen vom Modul 152 bei Herrn Brodbeck.</p>
                 <p>Für dieses Projekt habe ich folgende Frameworks verwendet:</p>
