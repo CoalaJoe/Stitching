@@ -48,13 +48,6 @@ class Image
     protected $name;
 
     /**
-     * @ORM\Column(name="path", type="string")
-     *
-     * @var string
-     */
-    protected $path;
-
-    /**
      * This variable won't be stored in the database. It is used for validation purposes only.
      *
      * @Assert\File(maxSize="6000000")
@@ -73,11 +66,12 @@ class Image
     /**
      * Image constructor.
      */
-    public function __construct()
+    public function __construct(string $image)
     {
         $tokenGenerator  = new UriSafeTokenGenerator();
-        $this->name      = $tokenGenerator->generateToken();
+        $this->name      = $tokenGenerator->generateToken().'.jpg';
         $this->createdAt = new \DateTime();
+        imagejpeg(imagecreatefromstring($image), $this->getUploadRootDir().'/'.$this->name);
     }
 
     /**
@@ -129,26 +123,6 @@ class Image
     }
 
     /**
-     * @return string
-     */
-    public function getPath():string
-    {
-        return $this->path;
-    }
-
-    /**
-     * @param string $path
-     *
-     * @return $this
-     */
-    public function setPath(string $path)
-    {
-        $this->path = $path;
-
-        return $this;
-    }
-
-    /**
      * Get file.
      *
      * @return UploadedFile
@@ -173,7 +147,7 @@ class Image
      */
     public function getWebPath()
     {
-        return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
+        return null === $this->name ? null : $this->getUploadDir().'/'.$this->name;
     }
 
     /**
@@ -197,7 +171,7 @@ class Image
      */
     public function getAbsolutePath()
     {
-        return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
+        return null === $this->name ? null : $this->getUploadRootDir().'/'.$this->name;
     }
 
     /**

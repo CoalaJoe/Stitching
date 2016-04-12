@@ -38,8 +38,10 @@ class WebcamHandler
      */
     public function takeImage()
     {
+        sleep(1);
         $curl   = $this->getBaseCurl($this->getBaseUrl()."video.jpg");
         $result = curl_exec($curl);
+        $result = imagecreatefromstring($result);
 
         return $result;
     }

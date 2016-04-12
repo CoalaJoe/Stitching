@@ -36,9 +36,8 @@ class CleanupCommand extends ContainerAwareCommand
         $latestDateTime = $datetime = new \DateTime(date('Y-m-d H:i:s', strtotime("-14 day")));
         $oldImages      = $em->createQueryBuilder()->select('i')->from('AppBundle:Image', 'i')->where('i.createdAt < :oldDate')->setParameter('oldDate', $latestDateTime)->getQuery(
         )->getResult();
-        // TODO: Get Images older than 14 days and remove them.
-
-
+        
+        // TODO: create a cronjob
 
         $counter = 0;
         foreach ($oldImages as $image) {
@@ -49,7 +48,5 @@ class CleanupCommand extends ContainerAwareCommand
             }
         }
         $em->flush();
-
-
     }
 }

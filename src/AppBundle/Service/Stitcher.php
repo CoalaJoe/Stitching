@@ -33,7 +33,7 @@ class Stitcher
         }
 
         ob_start();
-        $baseImg   = imagecreate($width, $height);
+        $baseImg   = imagecreatetruecolor($width, $height);
         $usedWidth = 0;
 
         foreach ($args as $image) {

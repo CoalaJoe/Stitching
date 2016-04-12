@@ -4,6 +4,22 @@
     <div class="container">
         <div class="well bootable boot-start">
             <h1>Archiv</h1>
+            {% for image in images %}
+                <h3>{{ image.name }} - {{ image.createdAt|date }}</h3>
+                <div>
+                    <img src="/{{ image.webPath }}" width="100%" style="margin-bottom: 10px"/>
+                    <button class="btn btn-danger btn-delete" data-id="{{ image.id }}"><i class="material-icons">delete</i></button>
+                </div>
+            {% endfor %}
+            <div>
+                {% for num in 1..amount %}
+                    {% if num == site %}
+                    {{ num }}
+                    {% else %}
+                    <a href="{{ path('app_archive_route', {'site': num}) }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}

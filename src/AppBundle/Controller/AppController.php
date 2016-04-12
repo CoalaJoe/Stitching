@@ -22,31 +22,22 @@ class AppController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $handler = $this->get('app.webcam.handler');
-        $handler->moveHome();
-        $handler->moveLeft();
-        sleep(1);
-        $image1 = $handler->takeImage();
-        $handler->moveHome();
-        sleep(1);
-        $image2 = $handler->takeImage();
-        $handler->moveRight();
-        sleep(1);
-        $image3 = $handler->takeImage();
 
-        $img = $this->get('app.stitcher')->stitch($image1, $image2, $image3);
-
-        $image = new Image();
-
-        return $this->render('@App/app/index.html.twig', array('img' => base64_encode($img)));
+        return $this->render('@App/app/index.html.twig');
     }
 
     /**
-     * @Route("/archive", name="app_archive_route")
+     * @Route("/archive/{site}", name="app_archive_route", requirements={"site": "\d+"}, defaults={"site": 1})
      */
-    public function archiveAction()
+    public function archiveAction(Request $request, $site)
     {
-        return $this->render('AppBundle:app:archive.html.twig');
+        $site   = ($site < 1) ? 1 : $site;
+        $qb     = $this->get('doctrine.orm.entity_manager')->createQueryBuilder();
+        $images = $qb->select('i')->from('AppBundle:Image', 'i')->setMaxResults(10)->setFirstResult($site * 10 - 10)->getQuery()->getResult();
+
+        $amount = $qb->select('count(i.id)')->setMaxResults(null)->setFirstResult(0)->getQuery()->getSingleScalarResult() / 10;
+
+        return $this->render('AppBundle:app:archive.html.twig', ['images' => $images, 'site' => $site, 'amount' => ceil($amount)]);
     }
 
     /**
@@ -54,14 +45,41 @@ class AppController extends Controller
      */
     public function recordAction()
     {
-        return $this->render('AppBundle:app:record.html.twig');
+        $handler = $this->get('app.webcam.handler');
+        $handler->moveHome();
+        $handler->moveLeft();
+        $handler->moveLeft();
+        $image1 = $handler->takeImage();
+        $handler->moveHome();
+        $image2 = $handler->takeImage();
+        $handler->moveRight();
+        $handler->moveRight();
+        $image3 = $handler->takeImage();
+
+        $img = $this->get('app.stitcher')->stitch($image1, $image2, $image3);
+        $em  = $this->get('doctrine.orm.entity_manager');
+
+        $image = new Image($img);
+        $em->persist($image);
+        $em->flush();
+
+        return $this->render('AppBundle:app:record.html.twig', array('img' => base64_encode($img)));
     }
 
     /**
-     * @Route("/delete", name="app_delete_route")
+     * @Route("/delete/{id}", name="app_delete_route", requirements={"id": "\d+"})
+     * @param Request $request
+     * @param         $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function deleteAction()
+    public function deleteAction(Request $request, $id)
     {
+        $em = $this->get('doctrine.orm.entity_manager');
+        $image = $em->getRepository('AppBundle:Image')->find($id);
+        $em->remove($image);
+        $em->flush();
+
         return $this->render('AppBundle:app:delete.html.twig');
     }
 }
