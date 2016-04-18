@@ -22,8 +22,10 @@ class AppController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $qb    = $this->get('doctrine.orm.entity_manager')->createQueryBuilder();
+        $image = $qb->select('i')->from('AppBundle:Image', 'i')->orderBy('i.createdAt', 'DESC')->setMaxResults(1)->getQuery()->getSingleResult();
 
-        return $this->render('@App/app/index.html.twig');
+        return $this->render('@App/app/index.html.twig', ['image' => $image]);
     }
 
     /**
@@ -33,7 +35,7 @@ class AppController extends Controller
     {
         $site   = ($site < 1) ? 1 : $site;
         $qb     = $this->get('doctrine.orm.entity_manager')->createQueryBuilder();
-        $images = $qb->select('i')->from('AppBundle:Image', 'i')->setMaxResults(10)->setFirstResult($site * 10 - 10)->getQuery()->getResult();
+        $images = $qb->select('i')->from('AppBundle:Image', 'i')->orderBy('i.createdAt', 'DESC')->setMaxResults(10)->setFirstResult($site * 10 - 10)->getQuery()->getResult();
 
         $amount = $qb->select('count(i.id)')->setMaxResults(null)->setFirstResult(0)->getQuery()->getSingleScalarResult() / 10;
 
@@ -75,7 +77,7 @@ class AppController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
-        $em = $this->get('doctrine.orm.entity_manager');
+        $em    = $this->get('doctrine.orm.entity_manager');
         $image = $em->getRepository('AppBundle:Image')->find($id);
         $em->remove($image);
         $em->flush();
