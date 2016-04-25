@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks()
+ * @ORM\HasLifecycleCallbacks()
  *
  * @package AppBundle\Entity
  */
